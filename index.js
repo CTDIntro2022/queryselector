@@ -5,17 +5,84 @@ function changeColor(newColor) {
   elem.style.color = newColor;
 }
 
+// Event listners for click  on buttons
+// Find By ID
 const idButtons = document.getElementsByName('IDTarget');
-const classButtons = document.getElementsByName('ClassTarget')
-const selButtons = document.getElementsByName('SelTarget');
-
 idButtons[0].addEventListener('click', FindById);
+
+// Find By Name
+const classButtons = document.getElementsByName('ClassTarget')
 classButtons[0].addEventListener('click', FindByClass);
+
+// Find By Selector
+const selButtons = document.getElementsByName('SelTarget');
 selButtons[0].addEventListener('click', FindBySelector)
 
+// Event listeners to have hitting Enter key on input text box result in click to submit
+
+// Make Enter key behave like the user clicked on submit
+// Find By ID
+const selEl = document.getElementById('Selectors');
+selEl.addEventListener("keypress", EnterKey);
+
+// Find By Name
+const idToFindEl = document.getElementById('IDField');
+idToFindEl.addEventListener("keypress", EnterKey);
+
+// Find By Selector
+const classToFindEl = document.getElementById('classField');
+classToFindEl.addEventListener("keypress", EnterKey);
+
+function EnterKey (event) {
+	logFunction (arguments.callee.toString());
+	// If the user presses the "Enter" key on the keyboard
+	if (event.key === "Enter") {
+		console.log ("  Enter key");
+		// Cancel the default action, if needed
+		event.preventDefault();
+		
+		// Figure out which button based on the field ID of the text field
+		if (event.currentTarget) {
+			console.log ("  Current Target is not null")
+			const tgtName = event.currentTarget.id;
+			console.log ("    Value:", tgtName);
+			
+			var buttonName = "";
+			switch (tgtName) {
+				
+				case "IDField":				// Find by Name
+					buttonName = "IDTarget"
+					break;
+				
+				case "classField":			// Find by Class
+					buttonName = "ClassTarget";
+					break;
+			
+				case "Selectors":			// Find by selectors
+					buttonName = "SelTarget";
+					break;
+		
+			}
+			
+			console.log ("Button Name: ", buttonName);
+			
+			// Trigger the button element with a click
+			const buttons = document.getElementsByName(buttonName)
+			// buttons[0].click();
+			buttons[0].focus();
+		}
+		else {
+			console.log ("  Current Target is null");
+		}
+			
+
+	}	
+}
+
 function FindBySelector (event) {
-	console.log ("FindBySelector");
-	const selEl = document.getElementById('Selectors')
+	logFunction (arguments.callee.toString());
+
+	// selEl is global
 	const selText = selEl.value;
 	const elems = document.querySelectorAll (selText);
 	if (!elems.length) {
@@ -30,7 +97,7 @@ function FindBySelector (event) {
 
 function FindById (event) {
 	logFunction (arguments.callee.toString());
-	const idToFindEl = document.getElementById('IDField')
+
 	const idToFindText = idToFindEl.value
 	console.log ("  ID To find: ", idToFindText);
 	
@@ -41,7 +108,7 @@ function FindById (event) {
 	
 function FindByClass (event) {
 	logFunction (arguments.callee.toString());
-	const classToFindEl = document.getElementById('classField')
+
 	const classToFindText = classToFindEl.value
 	console.log ("  Class To find: ", classToFindText);
 	
